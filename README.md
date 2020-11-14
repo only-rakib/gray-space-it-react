@@ -10,7 +10,7 @@ Here is the Heroku link with Phase1,Phase2 and Bonus 2:
 ```
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://reactfrontenddev.herokuapp.com)
 
-##NB
+## NB
 If first time login or registration it takes time because the Login and Register apis are calling
 from  [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://exampleblogforgrayit.herokuapp.com/) 
 
