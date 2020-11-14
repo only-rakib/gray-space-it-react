@@ -41,6 +41,7 @@ class Register extends Component {
       this.state.confirm_passError
     ) {
       this.register();
+	document.getElementById("contactForm").reset();	
     }
   }
   onChangeHandler = (event) => {
