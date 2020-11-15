@@ -16,6 +16,7 @@ class Login extends Component {
       emailError: true,
       emailMgs: "",
       passMgs: "",
+      overlay: false,
     };
   }
   componentDidMount() {
@@ -47,6 +48,7 @@ class Login extends Component {
   };
   loginButtonPressed() {
     if (this.state.emailError) {
+      this.setState({ overlay: true });
       this.login();
     }
   }
@@ -65,7 +67,10 @@ class Login extends Component {
       redirect: "follow",
     };
 
-    fetch("https://exampleblogforgrayit.herokuapp.com/api/token/", requestOptions)
+    fetch(
+      "https://exampleblogforgrayit.herokuapp.com/api/token/",
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         if (result.access) {
@@ -78,9 +83,10 @@ class Login extends Component {
               email: this.state.email,
             })
           );
-          console.log("ok");
+          this.setState({ overlay: false });
           this.setState({ login: true });
         } else {
+          this.setState({ overlay: false });
           alert("Username or password incorrect");
         }
       })
@@ -90,68 +96,83 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <Nav />
-        <div className="container all-margin-top minimum-height">
-          <div className="mt-5"></div>
-          <h1 className="mt-5 mb-3 text-left">
-            Login
-            <small> Form</small>
-          </h1>
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item active">Login</li>
-          </ol>
-
-          <div className="row">
-            <div className="col-lg-4 mb-4">
-              <form name="sentMessage" id="contactForm" className="text-left">
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>Email*</label>
-                    <input
-                      type="email"
-                      className={className(
-                        "form-control",
-                        !this.state.emailError && "is-invalid"
-                      )}
-                      id="email"
-                      name="email"
-                      onChange={this.onChangeHandler}
-                    ></input>
-                    <small className="invalid_input">
-                      {this.state.emailMgs}
-                    </small>
-                  </div>
-                </div>
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>Password*</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      onChange={this.onChangeHandler}
-                    ></input>
-                  </div>
-                </div>
-                <div id="success"></div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    this.loginButtonPressed();
-                  }}
-                  className="btn btn-primary"
-                  id="login-btn"
-                >
-                  Login
-                </button>
-                {this.state.login ? <Redirect to="/posts" /> : <div></div>}
-              </form>
+        {this.state.overlay ? (
+          <div id="overlay">
+            <div className="position">
+              <div class="spinner-border" role="status"></div>
+              <strong>Login...</strong>
             </div>
           </div>
-        </div>
-        <Footer />
+        ) : (
+          <div>
+            <Nav />
+            <div className="container all-margin-top minimum-height">
+              <div className="mt-5"></div>
+              <h1 className="mt-5 mb-3 text-left">
+                Login
+                <small> Form</small>
+              </h1>
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item active">Login</li>
+              </ol>
+
+              <div className="row">
+                <div className="col-lg-4 mb-4">
+                  <form
+                    name="sentMessage"
+                    id="contactForm"
+                    className="text-left"
+                  >
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>Email*</label>
+                        <input
+                          type="email"
+                          className={className(
+                            "form-control",
+                            !this.state.emailError && "is-invalid"
+                          )}
+                          id="email"
+                          name="email"
+                          onChange={this.onChangeHandler}
+                        ></input>
+                        <small className="invalid_input">
+                          {this.state.emailMgs}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>Password*</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          name="password"
+                          onChange={this.onChangeHandler}
+                        ></input>
+                      </div>
+                    </div>
+                    <div id="success"></div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        this.loginButtonPressed();
+                      }}
+                      className="btn btn-primary"
+                      id="login-btn"
+                    >
+                      Login
+                    </button>
+                    {this.state.login ? <Redirect to="/posts" /> : <div></div>}
+                  </form>
+                </div>
+              </div>
+            </div>
+            <Footer />
+          </div>
+        )}
       </div>
     );
   }

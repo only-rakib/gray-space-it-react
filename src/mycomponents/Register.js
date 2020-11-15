@@ -22,7 +22,7 @@ class Register extends Component {
       emailError: "",
       passwordError: "",
       confirm_passError: "",
-      
+      overlay: false,
     };
   }
   componentDidMount() {
@@ -40,8 +40,9 @@ class Register extends Component {
       this.state.passwordError &&
       this.state.confirm_passError
     ) {
+      this.setState({ overlay: true });
       this.register();
-	document.getElementById("contactForm").reset();	
+      document.getElementById("contactForm").reset();
     }
   }
   onChangeHandler = (event) => {
@@ -148,16 +149,17 @@ class Register extends Component {
       redirect: "follow",
     };
 
-    fetch("https://exampleblogforgrayit.herokuapp.com/api/auth/register/", requestOptions)
+    fetch(
+      "https://exampleblogforgrayit.herokuapp.com/api/auth/register/",
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
+        this.setState({ overlay: false });
         if (result.first_name && result.last_name && result.email) {
-          alert("Registration Success")
-          
-        }
-        else
-        {
-          alert("Registration Failed")
+          alert("Registration Success");
+        } else {
+          alert("Registration Failed");
         }
       })
       .catch((error) => console.log("error", error));
@@ -165,130 +167,140 @@ class Register extends Component {
   render() {
     return (
       <div>
-        <Nav />
-        <div className="container all-margin-top text-left minimum-height">
-          <h1 className="mt-4 mb-3">
-            Register
-            <small> Form</small>
-          </h1>
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item active">Register</li>
-          </ol>
-
-          <div className="row">
-            <div className="col-lg-4 mb-4">
-              
-              <form name="sentMessage" id="contactForm">
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>First Name*</label>
-                    <input
-                      type="text"
-                      className={className(
-                        "form-control",
-                        !this.state.first_nameError && "is-invalid"
-                      )}
-                      id="first_name"
-                      name="first_name"
-                      required
-                      data-validation-required-message="Please enter your first name."
-                      onChange={this.onChangeHandler}
-                    ></input>
-                    <small className="invalid_input">
-                      {this.state.first_nameMgs}
-                    </small>
-                  </div>
-                </div>
-                <div className="controls">
-                  <label>Last Name*</label>
-                  <input
-                    type="text"
-                    className={className(
-                      "form-control",
-                      !this.state.last_nameError && "is-invalid"
-                    )}
-                    id="last_name"
-                    name="last_name"
-                    required
-                    data-validation-required-message="Please enter your last name."
-                    onChange={this.onChangeHandler}
-                  ></input>
-                  <small className="invalid_input">
-                    {this.state.last_nameMgs}
-                  </small>
-                </div>
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>Email*</label>
-                    <input
-                      type="email"
-                      className={className(
-                        "form-control",
-                        !this.state.emailError && "is-invalid"
-                      )}
-                      id="email"
-                      name="email"
-                      required
-                      data-validation-required-message="Please enter your email."
-                      onChange={this.onChangeHandler}
-                    ></input>
-                    <small className="invalid_input">
-                      {this.state.emailMgs}
-                    </small>
-                  </div>
-                </div>
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>Password*</label>
-                    <input
-                      type="password"
-                      className={className(
-                        "form-control",
-                        !this.state.passwordError && "is-invalid"
-                      )}
-                      id="password"
-                      name="password"
-                      onChange={this.onChangeHandler}
-                    ></input>
-                    <small className="invalid_input">
-                      {this.state.passwordMgs}
-                    </small>
-                  </div>
-                </div>
-                <div className="control-group form-group">
-                  <div className="controls">
-                    <label>Confirm Password*</label>
-                    <input
-                      type="password"
-                      className={className(
-                        "form-control",
-                        !this.state.confirm_passError && "is-invalid"
-                      )}
-                      name="confirm_pass"
-                      id="confirm_pass"
-                      onChange={this.onChangeHandler}
-                    ></input>
-                    <small className="invalid_input">
-                      {this.state.confirm_passMgs}
-                    </small>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    this.registerButtonPressed();
-                  }}
-                  className="btn btn-primary"
-                  id="login-btn"
-                >
-                  Register
-                </button>
-              </form>
+        {this.state.overlay ? (
+          <div id="overlay">
+            <div className="position">
+              <div class="spinner-border" role="status"></div>
+              <strong>Loading...</strong>
             </div>
           </div>
-        </div>
-        <Footer />
+        ) : (
+          <div>
+            <Nav />
+            <div className="container all-margin-top text-left minimum-height">
+              <h1 className="mt-4 mb-3">
+                Register
+                <small> Form</small>
+              </h1>
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item active">Register</li>
+              </ol>
+
+              <div className="row">
+                <div className="col-lg-4 mb-4">
+                  <form name="sentMessage" id="contactForm">
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>First Name*</label>
+                        <input
+                          type="text"
+                          className={className(
+                            "form-control",
+                            !this.state.first_nameError && "is-invalid"
+                          )}
+                          id="first_name"
+                          name="first_name"
+                          required
+                          data-validation-required-message="Please enter your first name."
+                          onChange={this.onChangeHandler}
+                        ></input>
+                        <small className="invalid_input">
+                          {this.state.first_nameMgs}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="controls">
+                      <label>Last Name*</label>
+                      <input
+                        type="text"
+                        className={className(
+                          "form-control",
+                          !this.state.last_nameError && "is-invalid"
+                        )}
+                        id="last_name"
+                        name="last_name"
+                        required
+                        data-validation-required-message="Please enter your last name."
+                        onChange={this.onChangeHandler}
+                      ></input>
+                      <small className="invalid_input">
+                        {this.state.last_nameMgs}
+                      </small>
+                    </div>
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>Email*</label>
+                        <input
+                          type="email"
+                          className={className(
+                            "form-control",
+                            !this.state.emailError && "is-invalid"
+                          )}
+                          id="email"
+                          name="email"
+                          required
+                          data-validation-required-message="Please enter your email."
+                          onChange={this.onChangeHandler}
+                        ></input>
+                        <small className="invalid_input">
+                          {this.state.emailMgs}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>Password*</label>
+                        <input
+                          type="password"
+                          className={className(
+                            "form-control",
+                            !this.state.passwordError && "is-invalid"
+                          )}
+                          id="password"
+                          name="password"
+                          onChange={this.onChangeHandler}
+                        ></input>
+                        <small className="invalid_input">
+                          {this.state.passwordMgs}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="control-group form-group">
+                      <div className="controls">
+                        <label>Confirm Password*</label>
+                        <input
+                          type="password"
+                          className={className(
+                            "form-control",
+                            !this.state.confirm_passError && "is-invalid"
+                          )}
+                          name="confirm_pass"
+                          id="confirm_pass"
+                          onChange={this.onChangeHandler}
+                        ></input>
+                        <small className="invalid_input">
+                          {this.state.confirm_passMgs}
+                        </small>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        this.registerButtonPressed();
+                      }}
+                      className="btn btn-primary"
+                      id="login-btn"
+                    >
+                      Register
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <Footer />
+          </div>
+        )}
       </div>
     );
   }
